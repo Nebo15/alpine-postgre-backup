@@ -54,12 +54,12 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
     echo " > DB name: $path"
 
     export PGPASSWORD=$pass
-    until psql -qAt -U replicator -h $host -d postgres -c "select user;"; do
+    until psql -qAt -U $user -h $host -d postgres -c "select user;"; do
       echo "sleep 1s and try again ..."
       sleep 1
     done
 
-    psql -h $host -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='pghoard') SELECT pg_create_physical_replication_slot('pghoard') FROM foo WHERE count=0;" -U replicator -d postgres
+    psql -h $host -c "WITH foo AS (SELECT COUNT(*) AS count FROM pg_replication_slots WHERE slot_name='pghoard') SELECT pg_create_physical_replication_slot('pghoard') FROM foo WHERE count=0;" -U $user -d postgres
   done
 
   echo "Run the pghoard daemon ..."
