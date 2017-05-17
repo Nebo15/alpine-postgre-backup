@@ -2,7 +2,7 @@
 {{$nodes := split (getenv "PG_HOSTS") ";"}}
 
 {
-   "backup_location": "{{getenv "DATA_DIR"}}/pghoard",
+   "backup_location": "{{getenv "PGDATA"}}/pghoard",
    "backup_sites":{
       {{range $i, $e := $nodes}}
       {{if $i}},{{end}}
@@ -49,8 +49,7 @@
             "tenant_name":"{{getenv "OS_TENANT_NAME"}}"
          {{end}}
          },
-         "pg_data_directory": "{{getenv "DATA_DIR"}}/{{$host}}/restore",
-         "pg_xlog_directory": "{{getenv "DATA_DIR"}}/{{$host}}/restore/pg_xlog"
+         "pg_data_directory": "{{getenv "PGDATA"}}/restore"
       }
       {{end}}
    },

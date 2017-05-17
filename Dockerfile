@@ -9,7 +9,6 @@ ENV REFRESHED_AT=2017-05-16 \
     LANG=en_US.UTF-8 \
     TERM=xterm \
     HOME=/ \
-    DATA_DIR=/var/lib/postgresql \
     CONFD_VERSION=0.12.0-alpha3 \
     PGHOARD_VERSION=f38b187 \
     PGHOARD_BASEBACKUP_COUNT=7 \

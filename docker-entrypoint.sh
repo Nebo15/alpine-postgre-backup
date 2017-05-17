@@ -10,11 +10,11 @@ echo "Create pghoard configuration with confd ..."
 confd -onetime -backend env
 
 echo "Create pghoard directories..."
-chown -R postgres ${DATA_DIR}
+chown -R postgres ${PGDATA}
 
 if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   echo "Dump configuration..."
-  cat ${DATA_DIR}/pghoard.json
+  cat ${PGDATA}/pghoard.json
 
   echo "Create physical_replication_slot on master nodes ..."
   for DATABASE_URL in "${HOSTS_URLS[@]}"
@@ -63,11 +63,11 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   done
 
   echo "Run the pghoard daemon ..."
-  exec gosu postgres pghoard --short-log --config ${DATA_DIR}/pghoard.json
+  exec gosu postgres pghoard --short-log --config ${PGDATA}/pghoard.json
 else
 
   echo "Dump configuration..."
-  cat ${DATA_DIR}/pghoard_restore.json
+  cat ${PGDATA}/pghoard_restore.json
 
   echo "Set pghoard to maintenance mode"
   touch /tmp/pghoard_maintenance_mode_file
@@ -79,7 +79,7 @@ else
   gosu postgres mv restore/postgresql.auto.conf restore/postgresql.auto.conf.backup
 
   echo "Start the pghoard daemon ..."
-  gosu postgres pghoard --short-log --config ${DATA_DIR}/pghoard_restore.json &
+  gosu postgres pghoard --short-log --config ${PGDATA}/pghoard_restore.json &
 
   if [ -z "$RESTORE_CHECK_COMMAND" ]; then
     # Manual mode
