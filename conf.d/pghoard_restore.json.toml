@@ -1,0 +1,3 @@
+[template]
+src = "pghoard_restore.json.tmpl"
+dest = "/var/lib/postgresql/pghoard_restore.json"
