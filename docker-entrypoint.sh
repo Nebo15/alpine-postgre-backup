@@ -1,22 +1,10 @@
 #!/bin/sh
 set -e
 
-export PG_HOSTS="postgres://postgres:postgres@travis:5432/annon;postgres://postgres2:postgres2@travis2:5432/annon2"
-export PGHOARD_STATSD_ADDRESS="localhost"
-export PGHOARD_STATSD_PORT="8051"
-export PGHOARD_STORAGE_TYPE="google"
-export GCS_PROJECT_ID="123"
-export GCS_BUCKET_NAME="bkup"
-export GCS_CREDENTIAL_FILE="/tmp/file.json"
-
 echo "Resolving backups sites.."
 HOSTS_URLS=(${PG_HOSTS//;/ })
 
 echo "Found ${#HOSTS_URLS[@]} PostgreSQL hosts: "
-for each in "${HOSTS_URLS[@]}"
-do
-  echo " - $each"
-done
 
 echo "Create pghoard configuration with confd ..."
 confd -onetime -backend env
@@ -60,7 +48,7 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
     path="`echo $url | grep / | cut -d/ -f2-`"
 
     echo " > DB user: $user"
-    echo " > DB pass: $pass"
+    echo " > DB pass: ****"
     echo " > DB host: $host"
     echo " > DB port: $port"
     echo " > DB name: $path"
