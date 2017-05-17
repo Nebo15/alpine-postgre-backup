@@ -5,6 +5,7 @@
    "backup_location": "{{getenv "PGDATA"}}/pghoard",
    "backup_sites":{
       "{{getenv "PGHOARD_RESTORE_SITE"}}":{
+         "pg_bin_directory": "/usr/local/bin",
          "basebackup_count": 1024,
          "nodes":[{}],
          "object_storage":{

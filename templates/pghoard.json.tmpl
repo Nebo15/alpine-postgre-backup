@@ -8,6 +8,7 @@
       {{if $i}},{{end}}
       {{$host := index (split (index (split (index (split . "@") 1) "/") 0) ":") 0 }}
       "{{$host}}":{
+         "pg_bin_directory": "/usr/local/bin",
          "active_backup_mode": "{{getenv "PGHOARD_ACTIVE_BACKUP_MODE"}}",
          "basebackup_count": {{getenv "PGHOARD_BASEBACKUP_COUNT"}},
          "basebackup_interval_hours": {{getenv "PGHOARD_BASEBACKUP_INTERVAL_HOURS"}},
