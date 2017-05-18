@@ -95,12 +95,12 @@ else
     # Manual mode
     # Just start PostgreSQL
     echo "Start PostgresSQL ..."
-    exec gosu postgres postgres -D restore
+    exec gosu postgres postgres -D ${PGDATA}/restore
   else
     # Automatic test mode
     # Run test commands against PostgreSQL server and exit
     echo "Start PostgresSQL ..."
-    gosu postgres pg_ctl -D restore start
+    gosu postgres pg_ctl -D ${PGDATA}/restore start
 
     # Give postgres some time before starting the harassment
     sleep 20
