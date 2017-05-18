@@ -80,7 +80,7 @@ else
   fi;
 
   echo "Get the latest available basebackup ..."
-  gosu postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite "${RECOVERY_FLAG}"
+  gosu postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite ${RECOVERY_FLAG}
 
   # remove custom server configuration (especially the hot standby parameter)
   gosu postgres mv restore/postgresql.auto.conf restore/postgresql.auto.conf.backup
