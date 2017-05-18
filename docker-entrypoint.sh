@@ -86,6 +86,7 @@ else
   ls -la ${PGDATA}/restore
 
   # remove custom server configuration (especially the hot standby parameter)
+  echo "local replication all trust" >> ${PGDATA}/restore/pg_hba.conf
   gosu postgres mv ${PGDATA}/restore/postgresql.auto.conf ${PGDATA}/restore/postgresql.auto.conf.backup
 
   echo "Start the pghoard daemon ..."
