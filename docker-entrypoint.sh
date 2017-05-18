@@ -65,7 +65,7 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   echo "Run the pghoard daemon ..."
   exec gosu postgres pghoard --short-log --config ${PGDATA}/pghoard.json
 else
-  echo "Starting restoration mode.."
+  echo "Starting restoration mode with opts: "$@
 
   echo "Dump configuration..."
   cat ${PGDATA}/pghoard_restore.json
@@ -73,10 +73,16 @@ else
   echo "Set pghoard to maintenance mode"
   touch /tmp/pghoard_maintenance_mode_file
 
-  echo "Get the latest available basebackup ..."
-  gosu postgres pghoard_restore get-basebackup --config pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite "$@"
+  if [ -z "${PGHOARD_RECOVERY_TARGET_TIME}" ]; then
+    RECOVERY_FLAG="--recovery-target-xid ${PGHOARD_RECOVERY_TARGET_XID}"
+  else
+    RECOVERY_FLAG="--recovery-target-time ${PGHOARD_RECOVERY_TARGET_TIME}"
+  fi;
 
-  # remove custom server configuration (espacially the hot standby parameter)
+  echo "Get the latest available basebackup ..."
+  gosu postgres pghoard_restore get-basebackup --config pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite "${RECOVERY_FLAG}"
+
+  # remove custom server configuration (especially the hot standby parameter)
   gosu postgres mv restore/postgresql.auto.conf restore/postgresql.auto.conf.backup
 
   echo "Start the pghoard daemon ..."
