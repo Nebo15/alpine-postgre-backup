@@ -6,6 +6,8 @@ Container can be started either in backup or restoration mode, which is set by `
 
 ## Installation
 
+Image is available in [nebo15/alpine-postgre-backup Docker Hub](https://hub.docker.com/r/nebo15/alpine-postgre-backup/) repo.
+
 ### Environment variables
 
 | VAR_NAME                            | Default Value           | Description |
