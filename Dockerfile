@@ -41,7 +41,7 @@ RUN set -ex; \
         g++ && \
     python3 -m ensurepip && \
     pip3 install --upgrade pip setuptools && \
-    pip3 install boto azure google-api-python-client cryptography https://github.com/ohmu/pghoard/archive/master.zip && \
+    pip3 install boto azure google google-api-python-client cryptography https://github.com/ohmu/pghoard/archive/master.zip && \
     apk del .build-deps && \
     rm -r /var/cache/apk/*
 
