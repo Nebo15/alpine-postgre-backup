@@ -10,6 +10,7 @@ echo "Create pghoard configuration with confd.."
 confd -onetime -backend env
 
 echo "Create pghoard directories.."
+mkdir -p ${PGDATA}/pghoard
 chown -R postgres ${PGDATA}
 
 if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
