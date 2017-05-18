@@ -4,23 +4,23 @@ set -e
 echo "Resolving backups sites.."
 HOSTS_URLS=(${PG_HOSTS//;/ })
 
-echo "Found ${#HOSTS_URLS[@]} PostgreSQL hosts: "
+echo "Found ${#HOSTS_URLS[@]} PostgreSQL hosts.."
 
-echo "Create pghoard configuration with confd ..."
+echo "Create pghoard configuration with confd.."
 confd -onetime -backend env
 
-echo "Create pghoard directories..."
+echo "Create pghoard directories.."
 chown -R postgres ${PGDATA}
 
 if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
-  echo "Dump configuration..."
+  echo "Starting backup mode.."
+
+  echo "Dump configuration.."
   cat ${PGDATA}/pghoard.json
 
   echo "Create physical_replication_slot on master nodes ..."
   for DATABASE_URL in "${HOSTS_URLS[@]}"
   do
-    echo " - $DATABASE_URL"
-
     # extract the protocol
     proto="`echo $DATABASE_URL | grep '://' | sed -e's,^\(.*://\).*,\1,g'`"
     # remove the protocol
@@ -47,11 +47,11 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
     # extract the path (if any)
     path="`echo $url | grep / | cut -d/ -f2-`"
 
-    echo " > DB user: $user"
-    echo " > DB pass: ****"
-    echo " > DB host: $host"
-    echo " > DB port: $port"
-    echo " > DB name: $path"
+    echo " - DB host: $host"
+    echo "   DB user: $user"
+    echo "   DB pass: ****"
+    echo "   DB port: $port"
+    echo "   DB name: $path"
 
     export PGPASSWORD=$pass
     until psql -qAt -U $user -h $host -d postgres -c "select user;"; do
@@ -65,6 +65,7 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   echo "Run the pghoard daemon ..."
   exec gosu postgres pghoard --short-log --config ${PGDATA}/pghoard.json
 else
+  echo "Starting restoration mode.."
 
   echo "Dump configuration..."
   cat ${PGDATA}/pghoard_restore.json
@@ -107,16 +108,8 @@ else
 
     if [ $OUT_LINES -gt 0 ]; then
       echo "AutoCheck: SUCCESS"
-      RES=1
     else
       echo "AutoCheck: FAILURE"
-      RES=0
-    fi
-
-    if [ ! -z "$PUSHGATEWAY_URL" ]; then
-      cat << EOF | curl --binary-data @- ${PUSHGATEWAY_URL}/metrics/jobs/pghoard_restore/instances/${PGHOARD_RESTORE_SITE}
-  check_success ${RES}
-EOF
     fi
   fi
 fi
