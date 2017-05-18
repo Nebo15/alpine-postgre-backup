@@ -69,9 +69,12 @@ For restoration:
 
 If `PGHOARD_STATSD_ADDRESS` environment variable is set, this container will send meaningful metrics about backups:
 
-Metric Name
 - `pghoard.compressed_size_ratio` - (gauge) backups compression ratio.
 - `pghoard.last_upload_age` - (gauge) number of seconds since last upload to the storage.
 - `pghoard.total_upload_size` - (gauge) total upload volume.
 - `pghoard.upload_size` - (rate) size of uploaded backup.
 - `pghoard.xlogs_since_basebackup` - (gauge) number of XLogs since last basebackup.
+
+## License
+
+See [LICENSE.md](LICENSE.md).
