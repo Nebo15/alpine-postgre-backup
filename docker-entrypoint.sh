@@ -16,8 +16,10 @@ chown -R postgres ${PGDATA}
 if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   echo "Starting backup mode.."
 
-  echo "Dump configuration.."
-  cat ${PGDATA}/pghoard.json
+  if [[ "${DUMP_CONFIG}" == "true" ]]; then
+    echo "Dump configuration.."
+    cat ${PGDATA}/pghoard.json
+  fi;
 
   echo "Create physical_replication_slot on master nodes ..."
   for DATABASE_URL in "${HOSTS_URLS[@]}"
@@ -68,8 +70,10 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
 else
   echo "Starting restoration mode with opts: "$@
 
-  echo "Dump configuration..."
-  cat ${PGDATA}/pghoard_restore.json
+  if [[ "${DUMP_CONFIG}" == "true" ]]; then
+    echo "Dump configuration.."
+    cat ${PGDATA}/pghoard_restore.json
+  fi;
 
   echo "Set pghoard to maintenance mode"
   touch /tmp/pghoard_maintenance_mode_file
