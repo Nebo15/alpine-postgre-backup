@@ -13,6 +13,12 @@
          "basebackup_count": {{getenv "PGHOARD_BASEBACKUP_COUNT"}},
          "basebackup_interval_hours": {{getenv "PGHOARD_BASEBACKUP_INTERVAL_HOURS"}},
          "nodes": ["{{.}}"],
+         {{if getenv "PGHOARD_ENCRYPTION_KEY_ID"}}
+         "encryption_key_id": "{{getenv "PGHOARD_ENCRYPTION_KEY_ID"}}",
+         "{{getenv "PGHOARD_ENCRYPTION_KEY_ID"}}": {
+           "public": "{{getenv "PGHOARD_ENCRYPTION_PUBLIC_KEY"}}",
+         },
+         {{end}}
          "object_storage":{
          {{if eq $storage_type "local"}}
             "storage_type": "local",
