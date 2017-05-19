@@ -15,8 +15,10 @@
          "nodes": ["{{.}}"],
          {{if getenv "PGHOARD_ENCRYPTION_KEY_ID"}}
          "encryption_key_id": "{{getenv "PGHOARD_ENCRYPTION_KEY_ID"}}",
-         "{{getenv "PGHOARD_ENCRYPTION_KEY_ID"}}": {
-           "public": "{{getenv "PGHOARD_ENCRYPTION_PUBLIC_KEY"}}"
+         "encryption_keys": {
+           "{{getenv "PGHOARD_ENCRYPTION_KEY_ID"}}": {
+             "public": "{{getenv "PGHOARD_ENCRYPTION_PUBLIC_KEY"}}"
+           }
          },
          {{end}}
          "object_storage":{
