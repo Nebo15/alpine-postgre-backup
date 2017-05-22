@@ -27,6 +27,7 @@ For restoration:
 | VAR_NAME                            | Default Value           | Description |
 | ----------------------------------- | ----------------------- | ----------- |
 | `PGHOARD_RESTORE_SITE`              | not set                 | Host name of a backed-up database. |
+| `PGHOARD_ENCRYPTION_PRIVATE_KEY`    | not set                 | Private key to decrypt your backups. Optional. |
 
 Encrypt your backups:
 
