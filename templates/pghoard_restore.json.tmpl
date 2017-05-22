@@ -1,5 +1,4 @@
 {{$storage_type := getenv "PGHOARD_STORAGE_TYPE"}}
-{{$nodes := split (getenv "PG_HOSTS") ";"}}
 
 {
    "backup_location": "{{getenv "PGDATA"}}/pghoard",

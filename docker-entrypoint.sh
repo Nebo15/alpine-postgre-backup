@@ -101,8 +101,6 @@ else
     # Just start PostgreSQL
     echo "Start PostgresSQL ..."
     exec gosu postgres postgres -D ${PGDATA}/restore
-
-    sleep infinity
   else
     # Automatic test mode
     # Run test commands against PostgreSQL server and exit
@@ -128,4 +126,7 @@ else
       echo "AutoCheck: FAILURE"
     fi
   fi
+
+  echo "Hooray! Backup is ready to be fetched"
+  sleep infinity
 fi
