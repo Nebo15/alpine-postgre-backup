@@ -101,6 +101,8 @@ else
     # Just start PostgreSQL
     echo "Start PostgresSQL ..."
     exec gosu postgres postgres -D ${PGDATA}/restore
+
+    sleep infinity
   else
     # Automatic test mode
     # Run test commands against PostgreSQL server and exit
