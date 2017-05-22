@@ -66,7 +66,7 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   done
 
   echo "Run the pghoard daemon ..."
-  exec gosu postgres pghoard --short-log --config ${PGDATA}/pghoard.json
+  exec su-exec postgres pghoard --short-log --config ${PGDATA}/pghoard.json
 else
   echo "Starting restoration mode with opts: "$@
 
@@ -100,7 +100,7 @@ else
     # Manual mode
     # Just start PostgreSQL
     echo "Start PostgresSQL in daemon mode ..."
-    exec su-exec postgres postgres -D ${PGDATA}/restore &
+    su-exec postgres postgres -D ${PGDATA}/restore &
 
     sleep 60
   else
@@ -119,7 +119,7 @@ else
     done
 
     echo "AutoCheck: running command on db..."
-    OUT_LINES=$(gosu postgres psql -c "$RESTORE_CHECK_COMMAND" "$RESTORE_CHECK_DB" | wc -l)
+    OUT_LINES=$(su-exec postgres psql -c "$RESTORE_CHECK_COMMAND" "$RESTORE_CHECK_DB" | wc -l)
     echo "AutoCheck: $OUT_LINES lines returned"
 
     if [ $OUT_LINES -gt 0 ]; then
