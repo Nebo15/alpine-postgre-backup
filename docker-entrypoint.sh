@@ -66,7 +66,7 @@ if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   done
 
   echo "Run the pghoard daemon ..."
-  exec su-exec postgres pghoard --short-log --config ${PGDATA}/pghoard.json
+  su-exec postgres pghoard --short-log --config ${PGDATA}/pghoard.json
 else
   echo "Starting restoration mode with opts: "$@
 
