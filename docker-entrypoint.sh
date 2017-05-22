@@ -100,7 +100,7 @@ else
     # Manual mode
     # Just start PostgreSQL
     echo "Start PostgresSQL in daemon mode ..."
-    exec su-exec postgres postgres -D ${PGDATA}/restore
+    exec su-exec postgres postgres -D ${PGDATA}/restore &
 
     sleep 60
   else
@@ -129,6 +129,6 @@ else
     fi
   fi
 
-  echo "Hooray! Backup is ready to be fetched"
+  echo "INFO. Backup should be ready to be fetched"
   sleep infinity
 fi
