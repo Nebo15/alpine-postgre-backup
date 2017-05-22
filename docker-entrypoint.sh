@@ -85,32 +85,34 @@ else
   fi;
 
   echo "Get the latest available basebackup ..."
-  gosu postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite ${RECOVERY_FLAG}
+  su-exec postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite ${RECOVERY_FLAG}
 
   ls -la ${PGDATA}/restore
 
   # remove custom server configuration (especially the hot standby parameter)
   echo "local replication all trust" >> ${PGDATA}/restore/pg_hba.conf
-  gosu postgres mv ${PGDATA}/restore/postgresql.auto.conf ${PGDATA}/restore/postgresql.auto.conf.backup
+  su-exec postgres mv ${PGDATA}/restore/postgresql.auto.conf ${PGDATA}/restore/postgresql.auto.conf.backup
 
   echo "Start the pghoard daemon ..."
-  gosu postgres pghoard --short-log --config ${PGDATA}/pghoard_restore.json &
+  su-exec postgres pghoard --short-log --config ${PGDATA}/pghoard_restore.json &
 
   if [ -z "$RESTORE_CHECK_COMMAND" ]; then
     # Manual mode
     # Just start PostgreSQL
-    echo "Start PostgresSQL ..."
-    exec gosu postgres postgres -D ${PGDATA}/restore
+    echo "Start PostgresSQL in daemon mode ..."
+    exec su-exec postgres postgres -D ${PGDATA}/restore
+
+    sleep 60
   else
     # Automatic test mode
     # Run test commands against PostgreSQL server and exit
     echo "Start PostgresSQL ..."
-    gosu postgres pg_ctl -D ${PGDATA}/restore start
+    su-exec postgres pg_ctl -D ${PGDATA}/restore start
 
     # Give postgres some time before starting the harassment
     sleep 20
 
-    until gosu postgres psql -At -c "SELECT * FROM pg_is_in_recovery()" | grep -q f
+    until su-exec postgres psql -At -c "SELECT * FROM pg_is_in_recovery()" | grep -q f
     do
       sleep 5
       echo "AutoCheck: waiting for restoration to finish..."
