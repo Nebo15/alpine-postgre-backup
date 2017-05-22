@@ -129,6 +129,5 @@ else
     fi
   fi
 
-  echo "INFO. Backup should be ready to be fetched"
-  sleep infinity
+  while :; do echo "INFO. Backup should be ready to be fetched"; sleep 2073600; done
 fi
