@@ -12,6 +12,8 @@ confd -onetime -backend env
 echo "Create pghoard directories.."
 mkdir -p ${PGDATA}/pghoard
 chown -R postgres ${PGDATA}
+mkdir -p /var/lib/pghoard
+chown -R postgres /var/lib/pghoard
 
 if [ -z "${PGHOARD_RESTORE_SITE}" ]; then
   echo "Starting backup mode.."
