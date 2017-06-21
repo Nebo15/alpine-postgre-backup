@@ -95,7 +95,7 @@ else
   fi;
 
   echo "Starting restoration process"
-  su-exec postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action shutdown --recovery-end-command "pkill pghoard" --overwrite ${RECOVERY_FLAG}
+  su-exec postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite ${RECOVERY_FLAG}
 
   ls -la ${PGDATA}/restore
 
