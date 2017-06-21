@@ -83,7 +83,7 @@ else
   echo "Listing available basebackups"
   pghoard_restore list-basebackups --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE
 
-  if [ -z "${PGHOARD_RECOVERY_BASEBACKUP}" ]; then
+  if [[ "${PGHOARD_RECOVERY_BASEBACKUP}" != "" ]]; then
     echo "Recovery to the basebackup ${PGHOARD_RECOVERY_BASEBACKUP}"
     RECOVERY_FLAG="--basebackup ${PGHOARD_RECOVERY_BASEBACKUP}"
   elif [ -z "${PGHOARD_RECOVERY_TARGET_TIME}" ]; then
