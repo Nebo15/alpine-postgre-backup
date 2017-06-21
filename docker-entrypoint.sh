@@ -80,14 +80,22 @@ else
   echo "Set pghoard to maintenance mode"
   touch /tmp/pghoard_maintenance_mode_file
 
-  if [ -z "${PGHOARD_RECOVERY_TARGET_TIME}" ]; then
+  echo "Listing available basebackups"
+  pghoard_restore list-basebackups --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE
+
+  if [ -z "${PGHOARD_RECOVERY_BASEBACKUP}" ]; then
+    echo "Recovery to the basebackup ${PGHOARD_RECOVERY_BASEBACKUP}"
+    RECOVERY_FLAG="--basebackup ${PGHOARD_RECOVERY_BASEBACKUP}"
+  elif [ -z "${PGHOARD_RECOVERY_TARGET_TIME}" ]; then
+    echo "Recovery to the transaction XID ${PGHOARD_RECOVERY_TARGET_XID}"
     RECOVERY_FLAG="--recovery-target-xid ${PGHOARD_RECOVERY_TARGET_XID}"
   else
+    echo "Recovery to the PITR ${PGHOARD_RECOVERY_TARGET_TIME}"
     RECOVERY_FLAG="--recovery-target-time ${PGHOARD_RECOVERY_TARGET_TIME}"
   fi;
 
-  echo "Get the latest available basebackup ..."
-  su-exec postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action promote --recovery-end-command "pkill pghoard" --overwrite ${RECOVERY_FLAG}
+  echo "Starting restoration process"
+  su-exec postgres pghoard_restore get-basebackup --config ${PGDATA}/pghoard_restore.json --site $PGHOARD_RESTORE_SITE --target-dir ${PGDATA}/restore --restore-to-master --recovery-target-action shutdown --recovery-end-command "pkill pghoard" --overwrite ${RECOVERY_FLAG}
 
   ls -la ${PGDATA}/restore
 
