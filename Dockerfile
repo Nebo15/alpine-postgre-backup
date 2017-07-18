@@ -1,4 +1,4 @@
-FROM nebo15/alpine-postgre:9.6.3-r4
+FROM nebo15/alpine-postgre:pglogical
 MAINTAINER Nebo#15 <support@nebo15.com>
 
 # Important! Update this no-op ENV variable when this Dockerfile
